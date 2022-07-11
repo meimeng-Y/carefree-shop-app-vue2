@@ -10,10 +10,9 @@ export default {
 }
 </script>
 
-<style lang="less">
-div {
-  img {
-    width: 500px;
-  }
+<style lang="less" scoped>
+#app {
+
 }
+
 </style>
