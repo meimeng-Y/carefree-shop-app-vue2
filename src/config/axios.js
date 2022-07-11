@@ -3,8 +3,8 @@ import axios from "axios";
 
 
 //请求根路径 mock路径
-axios.defaults.baseURL = 'http://127.0.0.1:4523/m1/1179224-0-default'
-// axios.defaults.baseURL = 'http://127.0.0.1'
+// axios.defaults.baseURL = 'http://127.0.0.1:4523/m1/1179224-0-default'
+axios.defaults.baseURL = 'http://127.0.0.1'
 axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
 // 请求拦截

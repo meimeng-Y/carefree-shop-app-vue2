@@ -19,7 +19,7 @@
           />
         </van-col>
         <van-col span="14">
-          <div id="userName">用户名</div>
+          <div id="userName">{{ nickname }}</div>
         </van-col>
       </van-row>
     </div>
@@ -29,7 +29,7 @@
       <van-grid>
         <van-grid-item class="userInfo" text="余额">
           <van-row>
-            <van-col span="24">0</van-col>
+            <van-col span="24">{{ nowMoney }}</van-col>
           </van-row>
           <van-row>
             <van-col span="24">余额</van-col>
@@ -45,7 +45,7 @@
         </van-grid-item>
         <van-grid-item class="userInfo" text="购买数">
           <van-row>
-            <van-col span="24">0</van-col>
+            <van-col span="24">{{ payCount }}</van-col>
           </van-row>
           <van-row>
             <van-col span="24">购买数</van-col>
@@ -53,7 +53,7 @@
         </van-grid-item>
         <van-grid-item class="userInfo" text="积分">
           <van-row>
-            <van-col span="24">0</van-col>
+            <van-col span="24">{{ integral }}</van-col>
           </van-row>
           <van-row>
             <van-col span="24">积分</van-col>
@@ -82,7 +82,7 @@
       <van-cell icon="setting" is-link title="修改密码" to="/rpwd"/>
     </van-cell-group>
     <!--    功能区end-->
-    <van-button size="large" style="margin-top: 15px" type="danger">退出登录</van-button>
+    <van-button size="large" style="margin-top: 15px" type="danger" @click="logout">退出登录</van-button>
   </div>
 </template>
 
@@ -90,7 +90,12 @@
 export default {
   name: "mine",
   data() {
-    return {};
+    return {
+      nickname: '',//用户昵称
+      nowMoney: 0,//用户余额
+      payCount: 0,//用户购买次数
+      integral: 0,//用户剩余积分
+    };
   },
   methods: {
     gofootprint() {
@@ -100,7 +105,21 @@ export default {
           titl: '我的足迹'
         }
       });
+    },
+    logout() {
+      window.localStorage.removeItem('token')
+      window.localStorage.removeItem('userInfo')
+      this.$toast.success('退出成功')
+      this.$router.push('/home')
     }
+  },
+  created() {
+    let user = JSON.parse(window.localStorage.getItem('userInfo'))
+    //console.log(user)
+    this.nickname = user.nickname
+    this.nowMoney = user.nowMoney
+    this.payCount = user.payCount
+    this.integral = user.integral
   }
 }
 </script>

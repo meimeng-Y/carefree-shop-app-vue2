@@ -19,15 +19,15 @@
       @failed="noVerify">
       <van-field
         v-model="username"
-        name="用户名"
-        label="用户名"
+        name="username"
+        label="手机号"
         placeholder="用户名"
         :rules="[{ required: true }]"
       />
       <van-field
         v-model="password"
         type="password"
-        name="密码"
+        name="password"
         label="密码"
         placeholder="密码"
         :rules="[{ required: true }]"
@@ -46,6 +46,7 @@
 
 <script>
 import {Toast} from "vant";
+import {login} from '../../config/api.js'
 
 export default {
   name: "Login",
@@ -58,7 +59,22 @@ export default {
   methods: {
     onSubmit() {
       //校验通过
-      console.log('校验通过')
+      // console.log('校验通过')
+      login({
+        'username': this.username,
+        'password': this.password
+      }).then(res => {
+        if (res.code === 200) {
+          Toast.success('登录成功！')
+          window.localStorage.setItem('token', res.data.token)
+          window.localStorage.setItem('userInfo', res.data.user)
+          this.$router.push('/mine')
+        } else if (res.code === 505) {
+          Toast.fail('账号或密码错误')
+        } else {
+          Toast.fail('出现错误');
+        }
+      })
     },
     noVerify() {
       //校验失败

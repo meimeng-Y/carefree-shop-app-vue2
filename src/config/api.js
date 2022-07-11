@@ -16,5 +16,8 @@ import {get, post} from './axios';
  * 最后通过export导出topics。
  */
 
+// 登录
+export const login = params => post('/login', params);
+
 // 主题首页
 export const topics = params => get('/findAll', params);
