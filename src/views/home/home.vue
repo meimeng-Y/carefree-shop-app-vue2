@@ -10,14 +10,16 @@
     <div id="my-swipe">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="(banner,index) in banners" :key="index">
-          <img v-lazy="'http://localhost:8008/api'+banner.pic" width="100%" height="100%"/>
+          <!--          banner.pic 轮播图的地址-->
+          <img v-lazy="img_url+banner.pic" width="100%" height="100%"/>
         </van-swipe-item>
       </van-swipe>
     </div>
     <!--    轮播图end-->
     <!--    功能图标-->
     <van-grid square clickable :border='false' style="margin-top: 9px">
-      <van-grid-item v-for="value in 4" :key="value" icon="photo-o" text="全部商品" to="/productList"/>
+      <van-grid-item v-for="(menus,index) in menuss" :key="index" :icon="img_url+menus.pic" :text="menus.name"
+                     to="/productList"/>
     </van-grid>
     <!--    功能图标end-->
     <!--    商品列表-->
@@ -66,7 +68,7 @@
 <script>
 import {Toast} from 'vant';
 import searchModule from "../../components/searchModule";
-import {getBanner} from '../../config/api'
+import {getBanner, IMG_URL, getMenus} from '../../config/api'
 
 export default {
   name: "home",
@@ -75,7 +77,9 @@ export default {
     return {
       isShow_search_off: false,
       ishome: true,
-      banners: [],
+      banners: [],//轮播图信息
+      img_url: IMG_URL,//图片主机地址
+      menuss: [] //首页菜单
     };
   },
   methods: {
@@ -89,17 +93,26 @@ export default {
       //去到搜索页
       this.$router.push('/search')
     },
-    getlunb() {
-
+    init() {
+      //首页轮播图
+      getBanner().then(res => {
+        if (res.code == 200) {
+          // console.log(res)
+          this.banners = res.data
+        }
+      })
+      //首页菜单
+      getMenus().then(res => {
+        if (res.code == 200) {
+          // console.log(res)
+          this.menuss = res.data
+        }
+      })
     }
   },
   mounted() {
-    getBanner().then(res => {
-      if (res.code == 200) {
-        // console.log(res)
-        this.banners = res.data
-      }
-    })
+    //获取首页数据
+    this.init()
   }
 }
 </script>
@@ -148,6 +161,7 @@ export default {
 
   #my-swipe {
     margin-top: 10px;
+    height: 180px;
   }
 }
 

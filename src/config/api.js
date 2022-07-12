@@ -15,6 +15,8 @@ import {get, post} from './axios';
  * 即请求接口时携带的参数对象
  * 最后通过export导出topics。
  */
+//图片主机地址
+export const IMG_URL = 'http://127.0.0.1';
 
 // 注册
 export const register = params => post('/register', params);
@@ -22,5 +24,8 @@ export const register = params => post('/register', params);
 // 登录
 export const login = params => post('/login', params);
 
-// 首页
+// 首页轮播
 export const getBanner = params => get('/index/banner', params);
+
+//首页菜单
+export const getMenus = params => get('/index/menus', params);
