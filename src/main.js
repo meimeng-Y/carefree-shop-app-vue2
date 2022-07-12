@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import Vant from 'vant';
 import 'vant/lib/index.css';
+import {Lazyload} from 'vant';
 
 /*解决路由跳转爆错的问题*/
 // 引入路由模块
@@ -19,6 +20,8 @@ VueRouter.prototype.push = function push(location) {
 Vue.use(VueRouter)
 /*解决路由跳转爆错的问题end*/
 
+//懒加载
+Vue.use(Lazyload);
 Vue.config.productionTip = false
 Vue.use(Vant);
 

@@ -16,6 +16,11 @@
       </van-field>
       <van-cell-group>
         <van-field
+          v-model="nickname"
+          label="昵称"
+          placeholder="请输入昵称"
+        />
+        <van-field
           v-model="phone"
           required
           label="手机号"
@@ -69,11 +74,13 @@
 
 <script>
 import {Toast} from "vant";
+import {register} from '@/config/api.js'
 
 export default {
   name: 'Register',
   data() {
     return {
+      nickname: '',
       phone: '',
       sms: '',
       password: '',
@@ -128,6 +135,19 @@ export default {
     onSubmit() {
       //校验通过
       console.log('校验通过')
+      register({
+        'account': this.phone,//手机号
+        'captcha': this.sms,//验证码
+        'password': this.password,
+        'nickname': this.nickname //用户昵称
+      }).then(res => {
+        if (res.code == 200) {
+          this.$toast.success(res.msg)
+          this.$router.push('/Login')
+        } else if (res.code == 422) {
+          this.$toast.fail(res.msg)
+        }
+      })
     },
     noVerify() {
       //校验失败

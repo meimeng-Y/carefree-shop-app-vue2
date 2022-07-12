@@ -9,10 +9,9 @@
     <!--    轮播图-->
     <div id="my-swipe">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item>1</van-swipe-item>
-        <van-swipe-item>2</van-swipe-item>
-        <van-swipe-item>3</van-swipe-item>
-        <van-swipe-item>4</van-swipe-item>
+        <van-swipe-item v-for="(banner,index) in banners" :key="index">
+          <img v-lazy="'http://localhost:8008/api'+banner.pic" width="100%" height="100%"/>
+        </van-swipe-item>
       </van-swipe>
     </div>
     <!--    轮播图end-->
@@ -67,7 +66,7 @@
 <script>
 import {Toast} from 'vant';
 import searchModule from "../../components/searchModule";
-
+import {getBanner} from '../../config/api'
 
 export default {
   name: "home",
@@ -75,7 +74,8 @@ export default {
   data() {
     return {
       isShow_search_off: false,
-      ishome: true
+      ishome: true,
+      banners: [],
     };
   },
   methods: {
@@ -88,8 +88,19 @@ export default {
     goSearch() {
       //去到搜索页
       this.$router.push('/search')
+    },
+    getlunb() {
+
     }
   },
+  mounted() {
+    getBanner().then(res => {
+      if (res.code == 200) {
+        // console.log(res)
+        this.banners = res.data
+      }
+    })
+  }
 }
 </script>
 
@@ -143,8 +154,6 @@ export default {
 .my-swipe .van-swipe-item {
   color: #fff;
   font-size: 20px;
-  line-height: 150px;
   text-align: center;
-  background-color: #39a9ed;
 }
 </style>
