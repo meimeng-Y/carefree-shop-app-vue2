@@ -8,15 +8,15 @@
     <span class="title">
       搜索历史
     </span>
-    <div>
+    <div id="history">
       <van-button
-        v-for="value in 14" :key="value"
+        v-for="value in oldKeywords" :key="value"
         type="primary" size="mini"
         round
         color="#eeeded"
         style="margin-left: 8px"
       >
-        迷你按钮
+        {{ value }}
       </van-button>
     </div>
     <!--    搜索历史区域end-->
@@ -24,20 +24,25 @@
     <span class="title">
       热门搜索
     </span>
-    <van-row v-for="value in 14" :key="value">
-      <van-col span="12">
-        <van-cell title="单元格"/>
-      </van-col>
-      <van-col span="12">
-        <van-cell title="单元格"/>
-      </van-col>
-    </van-row>
+    <div>
+      <van-tag
+        color="#eeeded"
+        size="large"
+        style="margin: 10px;"
+        text-color="#000"
+        plain type="primary"
+        v-for="value in Keywords" :key="value.title"
+      >
+        {{ value.title }}
+      </van-tag>
+    </div>
     <!--     热门搜索区域end-->
   </div>
 </template>
 
 <script>
 import searchModule from "../../components/searchModule";
+import {getKeyword} from '../../config/api'
 
 export default {
   name: "search",
@@ -45,8 +50,24 @@ export default {
   data() {
     return {
       isShow_search_off: true,
-      ishome: false
+      ishome: false,
+      Keywords: [],//热门搜索
+      oldKeywords: [],//搜索历史
     }
+  },
+  methods: {
+    //获取历史搜索
+    getOldKeywords() {
+      this.oldKeywords = JSON.parse(window.localStorage.getItem('oldKeywords'))
+    }
+  },
+  mounted() {
+    //获取历史搜索
+    this.getOldKeywords()
+    //获取热门搜索
+    getKeyword().then(res => {
+      this.Keywords = res.data
+    })
   }
 }
 </script>
@@ -64,6 +85,11 @@ export default {
 
   .van-button__text {
     color: #696969;
+  }
+  #history{
+    .van-button{
+      padding: 10px;
+    }
   }
 }
 </style>

@@ -29,8 +29,31 @@ export default {
     ishome: false
   },
   methods: {
+    //点击搜索
     onSearch(val) {
       Toast(val);
+      //判断本地是否有历史
+      if (window.localStorage.getItem('oldKeywords')) {
+        //有历史搜索，添加
+        console.log('有历史搜索')
+        let oldKeywords = JSON.parse(window.localStorage.getItem('oldKeywords'))
+        // console.log(oldKeywords)
+        oldKeywords.unshift(val); //将搜索历史添加到第一个
+        oldKeywords = Array.from(new Set(oldKeywords)) //去重
+        if (oldKeywords.length > 10) {
+          // 截取前十个
+          oldKeywords = oldKeywords.slice(0, 10)
+        }
+        window.localStorage.setItem('oldKeywords', JSON.stringify(oldKeywords))
+        this.$router.push('/productList')
+      } else {
+        //没有历史搜索，创建
+        console.log('没有历史搜索')
+        let oldKeywords = []
+        oldKeywords.unshift(val);
+        window.localStorage.setItem('oldKeywords', JSON.stringify(oldKeywords))
+        this.$router.push('/productList')
+      }
     },
     onCancel() {
       Toast('取消');
@@ -41,7 +64,8 @@ export default {
       if (this.ishome) {
         this.$router.push('/search')
       }
-    }
+    },
+
   },
 }
 </script>

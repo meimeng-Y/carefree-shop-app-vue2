@@ -28,19 +28,22 @@
         <van-col span="24">精品推荐：</van-col>
       </van-row>
       <van-grid :column-num="2" clickable :border='false'>
-        <van-grid-item v-for="value in 6" :key="value">
+        <van-grid-item v-for="(val,index) in BoutiqueLists" :key="index">
           <van-image
             width="10rem"
             height="10rem"
             fit="contain"
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src='img_url + val.image '
           />
           <van-row>
-            <van-col span="24" class="shopname">商品名123123123</van-col>
+            <!--            商品名-->
+            <van-col span="24" class="shopname">{{ val.storeName }}</van-col>
           </van-row>
           <van-row class="price">
-            <van-col span="12" class="newprice">当前价格</van-col>
-            <van-col span="12" class="oldprice">历史价格</van-col>
+            <!--            当前价格-->
+            <span class="newprice">￥{{ val.price | capittalizze }}</span>
+            <!--            历史价格-->
+            <span class="oldprice">￥{{ val.otPrice }}</span>
           </van-row>
         </van-grid-item>
       </van-grid>
@@ -49,16 +52,21 @@
     <!--    猜你喜欢-->
     <div id="shoplike" style="margin-top: 10px;">
       <van-row class="shoptitle">
-        <van-col span="24">精品推荐：</van-col>
+        <van-col span="24">猜你喜欢：</van-col>
       </van-row>
+      <!--
+        storeInfo:描述信息
+        storeName:商品标题
+        otPrice:历史价格
+      -->
       <van-card
-        v-for="value in 6" :key="value"
+        v-for="(val,index) in Likes" :key="index"
         tag="Like"
-        price="2.00"
-        desc="描述信息"
-        title="商品标题"
-        thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
-        origin-price="10.00"
+        :price="val.price | capittalizze"
+        :desc="val.storeInfo"
+        :title="val.storeName"
+        :thumb='img_url + val.image '
+        :origin-price="val.otPrice | capittalizze"
       />
     </div>
     <!--    猜你喜欢end-->
@@ -68,7 +76,7 @@
 <script>
 import {Toast} from 'vant';
 import searchModule from "../../components/searchModule";
-import {getBanner, IMG_URL, getMenus} from '../../config/api'
+import {getBanner, IMG_URL, getMenus, getBoutiqueList, getLike} from '../../config/api'
 
 export default {
   name: "home",
@@ -79,8 +87,17 @@ export default {
       ishome: true,
       banners: [],//轮播图信息
       img_url: IMG_URL,//图片主机地址
-      menuss: [] //首页菜单
+      menuss: [], //首页菜单
+      BoutiqueLists: [],//首页精品推荐
+      Likes: [],//首页猜你喜欢
     };
+  },
+  filters: {
+    //过滤器
+    capittalizze(val) {
+      let newVal = parseFloat(val).toFixed(2)
+      return newVal
+    },
   },
   methods: {
     onSearch(val) {
@@ -106,6 +123,21 @@ export default {
         if (res.code == 200) {
           // console.log(res)
           this.menuss = res.data
+        }
+      })
+      //首页精品推荐
+      getBoutiqueList().then(res => {
+        if (res.code == 200) {
+          // console.log(res)
+          this.BoutiqueLists = res.data
+        }
+      })
+
+      //首页猜你喜欢
+      getLike().then(res => {
+        if (res.code == 200) {
+          // console.log(res)
+          this.Likes = res.data
         }
       })
     }
@@ -139,11 +171,12 @@ export default {
     width: 88%;
     line-height: 19.8px;
     margin-top: 2px;
+    text-align: center;
   }
 
   .newprice {
     color: #ff8725;
-    font-size: 14px;
+    font-size: large;
     font-weight: bold;
   }
 

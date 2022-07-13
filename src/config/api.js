@@ -16,7 +16,7 @@ import {get, post} from './axios';
  * 最后通过export导出topics。
  */
 //图片主机地址
-export const IMG_URL = 'http://127.0.0.1';
+export const IMG_URL = 'http://127.0.0.1/img';
 
 // 注册
 export const register = params => post('/register', params);
@@ -29,3 +29,12 @@ export const getBanner = params => get('/index/banner', params);
 
 //首页菜单
 export const getMenus = params => get('/index/menus', params);
+
+//首页精品推荐
+export const getBoutiqueList = params => get('/index/boutiqueList', params);
+
+//首页猜你喜欢
+export const getLike = params => get('/index/like', params);
+
+//获取首页搜索热门搜索关键字
+export const getKeyword = params => get('/index/keyword', params);

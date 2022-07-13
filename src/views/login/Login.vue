@@ -69,7 +69,7 @@ export default {
           window.localStorage.setItem('token', res.data.token)
           window.localStorage.setItem('userInfo', res.data.user)
           this.$router.push('/mine')
-        } else if (res.code === 505) {
+        } else if (res.code === 422) {
           Toast.fail('账号或密码错误')
         } else {
           Toast.fail('出现错误');
