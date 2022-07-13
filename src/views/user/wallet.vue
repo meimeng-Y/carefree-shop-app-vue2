@@ -13,21 +13,21 @@
           <div class="title">
             <span> 总资产(元)</span>
             <br>
-            <span>122222222</span>
+            <span>{{ balance.nowMoney }}</span>
           </div>
         </van-col>
         <van-col span="8">
           <div class="title">
             <span> 累计充值(元)</span>
             <br>
-            <span>122222222</span>
+            <span>{{ balance.recharge }}</span>
           </div>
         </van-col>
         <van-col span="8">
           <div class="title">
             <span> 累计消费(元)</span>
             <br>
-            <span>122222222</span>
+            <span>{{ balance.orderStatusSum }}</span>
           </div>
         </van-col>
       </van-row>
@@ -36,13 +36,13 @@
 
     <!--    充值按钮-->
     <van-cell-group inset id="recharge">
-      <van-cell icon="shop-o">
+      <van-cell icon="shop-o" v-for=" val in rechargePriceWays" :key="val.id">
         <template #title>
-          充值送多少
+          充值{{ val.value.price }}送多少{{ val.value.give_price }}
         </template>
         <!-- 使用 right-icon 插槽来自定义右侧图标 -->
         <template #right-icon>
-          <van-button type="danger" size="small" round @click="">充值</van-button>
+          <van-button :loading="isClick" type="danger" size="small" round @click="rechargeBut(val.id)">充值</van-button>
         </template>
       </van-cell>
     </van-cell-group>
@@ -53,6 +53,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
+import {getBalance, getRechargeIndex, postRechargeTest} from '../../config/api'
 
 export default {
   name: "wallet",
@@ -61,7 +62,50 @@ export default {
     return {
       title: '我的钱包',
       ificon: false,
+      balance: {
+        is_hide: "",//不明白
+        recharge: 0.0,//累计充值金额
+        nowMoney: 0.0,//余额
+        orderStatusSum: 0.0//消费总额
+      },
+      rechargePriceWays: [], //充值方案全部
+      //rechargePriceWaysVal: [],//充值内容
+      isClick: false,//充值按钮是否被禁用
     }
+  },
+  mounted() {
+    //获取用户的钱包信息
+    this.getUserBalance()
+    //获取充值方案
+    getRechargeIndex().then(res => {
+      console.log(res)
+      this.rechargePriceWays = res.data.rechargePriceWays
+    })
+  },
+  methods: {
+    //模拟充值
+    rechargeBut(id) {
+      this.isClick = true
+      postRechargeTest({
+        rechar_id: id
+      }).then(res => {
+        if (res.code == 200) {
+          this.$toast.success(res.data)
+          this.getUserBalance()
+          this.isClick = false
+        } else {
+          this.$toast.success(res.data)
+          this.isClick = false
+        }
+      })
+    },
+    //获取用户的钱包信息
+    getUserBalance() {
+      getBalance().then(res => {
+        this.balance = res.data
+      })
+    },
+
   }
 }
 </script>

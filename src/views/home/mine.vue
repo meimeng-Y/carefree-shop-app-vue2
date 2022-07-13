@@ -65,11 +65,11 @@
     <!--    订单状态-->
     <van-cell-group id="OrderStatus" inset>
       <van-grid :column-num="5">
-        <van-grid-item icon="shop-o" text="未支付" to="/orderType"/>
-        <van-grid-item icon="logistics" text="待发货"/>
-        <van-grid-item icon="goods-collect-o" text="待收货"/>
-        <van-grid-item icon="cart-o" text="待评价"/>
-        <van-grid-item icon="cart-o" text="已完成"/>
+        <van-grid-item icon="shop-o" text="未支付" to="/orderType?type=0"/>
+        <van-grid-item icon="logistics" text="待发货" to="/orderType?type=1"/>
+        <van-grid-item icon="goods-collect-o" text="待收货" to="/orderType?type=2"/>
+        <van-grid-item icon="cart-o" text="待评价" to="/orderType?type=3"/>
+        <van-grid-item icon="cart-o" text="已完成" to="/orderType?type=4"/>
       </van-grid>
     </van-cell-group>
     <!--    订单状态end-->
@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import {getUserInfo} from '../../config/api'
+
 export default {
   name: "mine",
   data() {
@@ -100,9 +102,9 @@ export default {
   methods: {
     gofootprint() {
       this.$router.push({
-        name: 'collect',
-        params: {
-          titl: '我的足迹'
+        path: '/collect',
+        query: {
+          type: 'foot'
         }
       });
     },
@@ -111,15 +113,23 @@ export default {
       window.localStorage.removeItem('userInfo')
       this.$toast.success('退出成功')
       this.$router.push('/home')
-    }
+    },
+
   },
   created() {
-    let user = JSON.parse(window.localStorage.getItem('userInfo'))
-    //console.log(user)
-    this.nickname = user.nickname
-    this.nowMoney = user.nowMoney
-    this.payCount = user.payCount
-    this.integral = user.integral
+    //获取用户信息
+    getUserInfo().then(res => {
+      if (res.code == 200) {
+        window.localStorage.setItem('userInfo', JSON.stringify(res.data.user))
+        let user = JSON.parse(window.localStorage.getItem('userInfo'))
+        //console.log(user)
+        this.nickname = user.nickname
+        this.nowMoney = user.nowMoney
+        this.payCount = user.payCount
+        this.integral = user.integral
+      }
+    })
+
   }
 }
 </script>

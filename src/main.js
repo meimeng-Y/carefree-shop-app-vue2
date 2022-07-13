@@ -8,7 +8,7 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 import {Lazyload} from 'vant';
 
-/*解决路由跳转爆错的问题*/
+/*解决路由跳转爆错的问题  解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题*/
 // 引入路由模块
 import VueRouter from 'vue-router'
 // 重写push方法
@@ -25,20 +25,6 @@ Vue.use(Lazyload);
 Vue.config.productionTip = false
 Vue.use(Vant);
 
-
-/*进入路由之前*/
-router.beforeEach((to, from, next) => {
-  let islogin = window.localStorage.getItem('userInfo')
-  //console.log('islogin', islogin)
-  if (to.path == '/mine') {
-    if (islogin != null) {
-      next()
-    } else {
-      next("/login")
-    }
-  }
-  next()
-})
 
 /* eslint-disable no-new */
 new Vue({

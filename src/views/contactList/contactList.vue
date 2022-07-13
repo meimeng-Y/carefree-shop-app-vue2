@@ -7,18 +7,18 @@
     </van-sticky>
     <!--    顶部标题end-->
     <!--联系人列表信息-->
-    <van-cell-group v-for="val in 10" :key="val">
+    <van-cell-group v-for="val in Address" :key="val.id">
       <van-cell>
         <template #title>
-          <span>姓名</span>
-          <span>手机号</span>
+          <span>{{ val.realName }}</span>
+          <span>{{ val.phone }}</span>
         </template>
         <template #label>
-          <span>地址</span>
+          <span>{{ val.province }}{{ val.city }}{{ val.district }}{{ val.detail }}</span>
         </template>
         <!--        修改图标-->
         <template #right-icon>
-          <van-icon name="edit" class="search-icon" @click="goupdataContact"/>
+          <van-icon name="edit" class="search-icon" @click="goupdataContact(val.id)"/>
         </template>
         <!--        修改图标end-->
       </van-cell>
@@ -32,6 +32,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
+import {getAddress} from '../../config/api'
 
 export default {
   name: "contactList",
@@ -39,19 +40,27 @@ export default {
   data() {
     return {
       title: '联系人列表',
-      ificon: false
+      ificon: false,
+      Address: []
     }
   },
   methods: {
-    goupdataContact() {
+    goupdataContact(id) {
       this.$router.push({
         name: 'operateContactList',
         params: {
           titl: '修改联系人',
-          ifdel: true
+          ifdel: true,
+          addrid: id //地址的ID
         }
       });
     }
+  },
+  mounted() {
+    getAddress().then(res => {
+      console.log(res)
+      this.Address = res.data
+    })
   }
 }
 </script>

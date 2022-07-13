@@ -2,6 +2,7 @@
   <div>
     测试界面
     <a @click="ok1">ok1</a>
+    <a @click="ok2">ok2</a>
     {{ id }}
   </div>
 </template>
@@ -66,6 +67,9 @@ export default {
           resolve()
         }, 20000)
       })
+    },
+    ok2(){
+      this.axios
     }
   }
 }

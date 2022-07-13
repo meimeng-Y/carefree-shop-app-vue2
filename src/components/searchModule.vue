@@ -45,15 +45,21 @@ export default {
           oldKeywords = oldKeywords.slice(0, 10)
         }
         window.localStorage.setItem('oldKeywords', JSON.stringify(oldKeywords))
-        this.$router.push('/productList')
+        // this.$router.push('/productList')
       } else {
         //没有历史搜索，创建
         console.log('没有历史搜索')
         let oldKeywords = []
         oldKeywords.unshift(val);
         window.localStorage.setItem('oldKeywords', JSON.stringify(oldKeywords))
-        this.$router.push('/productList')
+        // this.$router.push('/productList')
       }
+      this.$router.replace({
+        name: 'productList',
+        params: {
+          keyword: val
+        }
+      })
     },
     onCancel() {
       Toast('取消');

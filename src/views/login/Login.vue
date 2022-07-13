@@ -67,7 +67,7 @@ export default {
         if (res.code === 200) {
           Toast.success('登录成功！')
           window.localStorage.setItem('token', res.data.token)
-          window.localStorage.setItem('userInfo', res.data.user)
+          window.localStorage.setItem('userInfo', JSON.stringify(res.data.user))
           this.$router.push('/mine')
         } else if (res.code === 422) {
           Toast.fail('账号或密码错误')

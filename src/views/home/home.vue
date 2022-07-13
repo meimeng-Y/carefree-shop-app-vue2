@@ -28,7 +28,8 @@
         <van-col span="24">精品推荐：</van-col>
       </van-row>
       <van-grid :column-num="2" clickable :border='false'>
-        <van-grid-item v-for="(val,index) in BoutiqueLists" :key="index">
+        <van-grid-item v-for="(val,index) in BoutiqueLists" :key="index"
+                       :to="{path:'/productDetails', query: { productId: val.id }}">
           <van-image
             width="10rem"
             height="10rem"
@@ -67,6 +68,7 @@
         :title="val.storeName"
         :thumb='img_url + val.image '
         :origin-price="val.otPrice | capittalizze"
+        @click="goProDeta(val.id)"
       />
     </div>
     <!--    猜你喜欢end-->
@@ -109,6 +111,10 @@ export default {
     goSearch() {
       //去到搜索页
       this.$router.push('/search')
+    },
+    goProDeta(id) {
+      // console.log('商品卡片被点击')
+      this.$router.push({path: '/productDetails', query: {productId: id}})
     },
     init() {
       //首页轮播图

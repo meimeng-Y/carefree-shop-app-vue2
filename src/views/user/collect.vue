@@ -10,19 +10,29 @@
     </van-sticky>
     <!--    顶部标题end-->
     <van-cell title=" " :value="text"
-              @click="ifchecboxs==false?ifchecboxs=true:ifchecboxs=false;text=='管理'?text='取消':text='管理'"/>
-
+              @click="ifchecboxs==false?ifchecboxs=true:ifchecboxs=false;
+              text=='管理'?text='取消':text='管理';
+              result=[]"/> <!--result=[]  隐藏多选框时清除多选框的选中-->
     <van-checkbox-group v-model="result">
       <van-grid :column-num="2">
-        <van-grid-item v-for="value in 10" :key="value">
-          <van-checkbox class="checboxs" name="a" v-if="ifchecboxs">
-          </van-checkbox>
+        <!--        :to="{path:'/productDetails', query: { productId: value.pid}}"-->
+        <van-grid-item v-for="value in collectlist"
+                       @click="goProductDetails(value.pid)"
+                       :key="value.pid">  <!-- pid商品ID-->
+          <!--          复选框-->
+          <!-- @click.stop阻止冒泡，防止点击是跳转到商品详情页面-->
+          <div @click.stop>
+            <!--          绑定的是商品的id-->
+            <van-checkbox class="checboxs" :name="value.pid" v-if="ifchecboxs">
+            </van-checkbox>
+          </div>
+          <!--          复选框end-->
           <van-image
             height="12rem"
             fit="cover"
-            src="https://img01.yzcdn.cn/vant/apple-1.jpg"/>
-          <van-cell id="shopname" value="名称"/>
-          <van-cell id="shopprice" value="价格"/>
+            :src="img_url+value.image"/>
+          <van-cell id="shopname" :value="value.storeName"/>
+          <van-cell id="shopprice" :value="value.price"/>
         </van-grid-item>
       </van-grid>
     </van-checkbox-group>
@@ -37,27 +47,66 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
+import {getCollectAll, IMG_URL, postCollectDels} from '../../config/api'
 
 export default {
   name: "collect",
   components: {TopTitle},
   data() {
     return {
+      img_url: IMG_URL,//图片地址主机
       title: '我的收藏',
       ificon: false,
       text: '管理',
-      result: [],
+      result: [],//多选
       ifchecboxs: false,
-      checked: false
+      checked: false,
+      queryType: 'collect',
+      collectlist: [],//收藏列表 或 足迹列表
     };
   },
   methods: {
     onSubmit() {
-
+      //批量删除
+      console.log(this.result)
+      postCollectDels({
+        listid: this.result,
+        category: this.queryType
+      }).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          this.$toast.success('删除成功')
+          //刷新数据
+          this.result = [] //清除多选框的选中
+          this.init()
+        }
+      })
+    },
+    goProductDetails(id) {
+      this.$router.push({
+        path: '/productDetails',
+        query: {productId: id}
+      })
+    },
+    //获取初始数据
+    init() {
+      getCollectAll({
+        type: this.queryType
+      }).then(res => {
+        console.log(res)
+        this.collectlist = res.data
+      })
     }
   },
   mounted() {
-    this.title = this.$route.params.titl
+    //设置标题
+    if (this.$route.query.type == 'foot') {
+      //我的足迹
+      this.title = '我的足迹'
+      this.queryType = 'foot'
+    }
+    //获取初始数据
+    this.init();
   }
 }
 </script>
@@ -76,7 +125,7 @@ export default {
     padding: 5px 8px;
 
     .van-cell__value {
-      text-align: center;
+      //text-align: center;
     }
 
   }

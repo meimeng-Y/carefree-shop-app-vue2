@@ -25,7 +25,7 @@ import paySuccess from "../views/order/paySuccess";
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -40,6 +40,9 @@ export default new Router({
         }, {
           path: '/mine',
           name: 'mine',
+          meta: {
+            isToken: true,
+          },
           component: mine
         }, {
           path: '/categories',
@@ -86,6 +89,9 @@ export default new Router({
     }, {
       path: '/contactList',
       name: 'contactList',
+      meta: {
+        isToken: true,
+      },
       component: contactList
     }, {
       path: '/operateContactList',
@@ -126,3 +132,22 @@ export default new Router({
 
   ]
 })
+
+/*进入路由之前*/
+router.beforeEach((to, from, next) => {
+  let loginInfo = window.localStorage.getItem('userInfo')//用户信息
+  let token = window.localStorage.getItem('token')//用户token
+  //console.log('islogin', islogin)
+  /*判断是否需要token*/
+  if (to.meta.isToken) {
+    if (loginInfo == null || token == null) {
+      return next("/login")
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+
+export default router

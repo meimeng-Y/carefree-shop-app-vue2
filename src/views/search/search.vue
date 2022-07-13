@@ -15,6 +15,7 @@
         round
         color="#eeeded"
         style="margin-left: 8px"
+        @click="goSearch(value)"
       >
         {{ value }}
       </van-button>
@@ -59,6 +60,15 @@ export default {
     //获取历史搜索
     getOldKeywords() {
       this.oldKeywords = JSON.parse(window.localStorage.getItem('oldKeywords'))
+    },
+    //点击搜索按钮跳转到商品列表
+    goSearch(val) {
+      this.$router.replace({
+        name: 'productList',
+        params: {
+          keyword: val
+        }
+      })
     }
   },
   mounted() {
@@ -86,8 +96,9 @@ export default {
   .van-button__text {
     color: #696969;
   }
-  #history{
-    .van-button{
+
+  #history {
+    .van-button {
       padding: 10px;
     }
   }

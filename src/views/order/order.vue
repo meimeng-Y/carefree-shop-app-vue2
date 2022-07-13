@@ -11,16 +11,19 @@
       <!--    背景图片 + 收货人-->
       <div id="topbg">
         <div id="text">
-          商家为发货
+          {{ order.statusDto.msg }}
         </div>
         <!--        收货人-->
         <van-cell id="address">
           <template #title>
-            <span> 姓名</span>
-            <span style="margin-left: 8px;">1211231321</span>
+            <!--            收货人-->
+            <span>{{ order.realName }}</span>
+            <!--电话号码-->
+            <span style="margin-left: 8px;">{{ order.userPhone }}</span>
           </template>
           <template #label>
-            <span>地址</span>
+            <!--            <span>地址</span>-->
+            <span>{{ order.userAddress }}</span>
           </template>
         </van-cell>
         <!--        收货人end-->
@@ -30,26 +33,25 @@
     <!--    顶部占位-->
 
     <!--订单信息-->
-    <van-cell title="订单状态" value="未发或"/>
+    <van-cell title="订单状态" :value="order.statusDto.title"/>
     <van-card
-      num="2"
-      price="2.00"
-      desc="描述信息"
-      title="商品标题"
-      thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
+      :num="order.totalNum"
+      :price="order.cartInfo[0].truePrice"
+      :desc="order.cartInfo[0].productInfo.storeInfo"
+      :title="order.cartInfo[0].productInfo.storeName"
+      :thumb='img_url + order.cartInfo[0].productInfo.image'
     >
       <template #tags>
-        <van-tag plain type="danger">标签</van-tag>
-        <van-tag plain type="danger">标签</van-tag>
+        <van-tag plain type="danger">{{ order.cartInfo[0].productInfo.attrInfo.sku }}</van-tag>
       </template>
     </van-card>
     <van-cell title="快递" value=""/>
-    <van-cell title="订单号" value=""/>
-    <van-cell title="下单时间" value=""/>
-    <van-cell title="运费" value=""/>
-    <van-cell title="优惠" value="无优惠"/>
-    <van-cell title="总金额" value="总金额"/>
-    <van-cell title="支付方式" value="支付方式"/>
+    <van-cell title="订单号" :value="order.orderId"/>
+    <van-cell title="下单时间" :value="order.createTime"/>
+    <van-cell title="运费" :value="order.payPostage===0?'免运费':order.payPostage"/>
+    <van-cell title="优惠" :value="order.payPostage===0?'无优惠':order.couponPrice"/>
+    <van-cell title="总金额" :value="order.totalPrice"/>
+    <van-cell title="支付方式" :value="order.statusDto.payType"/>
     <!--订单信息end-->
 
   </div>
@@ -57,15 +59,33 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
+import {postOrderDetail, IMG_URL} from "../../config/api";
 
 export default {
   name: "order",
   components: {TopTitle},
   data() {
     return {
+      img_url: IMG_URL,
       title: '订单详情',
       ificon: false,
+      order: {},//订单详情信息
     }
+  },
+  filters: {
+    //过滤器
+    capittalizze(val) {
+      let newVal = parseFloat(val).toFixed(2)
+      return newVal
+    },
+  },
+  created() {
+    let key = this.$route.query.key
+    // console.log(key)
+    postOrderDetail(key).then(res => {
+      console.log(res)
+      this.order = res.data
+    })
   }
 }
 </script>
