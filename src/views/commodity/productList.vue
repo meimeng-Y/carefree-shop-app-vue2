@@ -58,7 +58,7 @@ export default {
         isIntegral: 0, //是否积分兑换商品
       },
       limit: 10,
-      listProds: [],
+      listProds: [],//商品分类数据
       priceSort: 'asc'
     }
   },
