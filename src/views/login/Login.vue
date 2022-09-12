@@ -52,8 +52,8 @@ export default {
   name: "Login",
   data() {
     return {
-      username: '',
-      password: '',
+      username: '123456789',
+      password: '123456789',
     };
   },
   methods: {
@@ -64,12 +64,11 @@ export default {
         'username': this.username,
         'password': this.password
       }).then(res => {
-        if (res.code === 200) {
+        if (res.status === 200) {
           Toast.success('登录成功！')
           window.localStorage.setItem('token', res.data.token)
-          window.localStorage.setItem('userInfo', JSON.stringify(res.data.user))
           this.$router.push('/mine')
-        } else if (res.code === 422) {
+        } else if (res.status === 422) {
           Toast.fail('账号或密码错误')
         } else {
           Toast.fail('出现错误');

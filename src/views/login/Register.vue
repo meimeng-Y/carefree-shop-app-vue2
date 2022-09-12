@@ -17,7 +17,9 @@
       <van-cell-group>
         <van-field
           v-model="nickname"
+          required
           label="昵称"
+          :rules="[{ required: true }]"
           placeholder="请输入昵称"
         />
         <van-field
@@ -58,6 +60,7 @@
           <template #button>
             <van-button size="small" native-type="button" :disabled="isBut" type="primary" @click="sendsms">
               发送验证码
+              <!--              倒计时-->
               <van-count-down id="down_time" :time="time" format="ss" v-if="if_time" @finish="time_stop"/>
             </van-button>
           </template>
@@ -65,7 +68,7 @@
       </van-cell-group>
 
       <div style="margin: 16px">
-        <van-button round block type="info" native-type="submit" @click="onsubmit">注册</van-button>
+        <van-button round block type="info" native-type="submit">注册</van-button>
       </div>
     </van-form>
 
@@ -75,16 +78,17 @@
 <script>
 import {Toast} from "vant";
 import {register} from '@/config/api.js'
+import {registerCode} from "../../config/api";
 
 export default {
   name: 'Register',
   data() {
     return {
-      nickname: '',
-      phone: '',
-      sms: '',
-      password: '',
-      password1: '',
+      nickname: 'ioo',
+      phone: '18636569656',
+      sms: '验证码自动填充',
+      password: '12345',
+      password1: '12345',
       uploader: [],
       isSms: true,
       isBut: true,
@@ -99,7 +103,12 @@ export default {
       this.isBut = true //禁用发送验证码按钮
       this.isSms = false //允许输入
       this.if_time = true //显示倒计时
-
+      registerCode({
+        phone: this.phone,
+        type: "register",
+      }).then(res => {
+        this.sms = res.data
+      })
     },
     time_stop() {
       this.if_time = false //隐藏倒计时
@@ -141,10 +150,10 @@ export default {
         'password': this.password,
         'nickname': this.nickname //用户昵称
       }).then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           this.$toast.success(res.msg)
           this.$router.push('/Login')
-        } else if (res.code == 422) {
+        } else if (res.status == 422) {
           this.$toast.fail(res.msg)
         }
       })
@@ -152,25 +161,8 @@ export default {
     noVerify() {
       //校验失败
       Toast.fail(`注册失败！\n 请完善信息`);
-    },
-    onsubmit() {
-      /* if (this.phone == "" || this.sms == "" || this.password == "" || this.password1 == "") {
-         Toast('注册失败！信息未完善');
-       } else if (this.password != this.password1) {
-         Toast('密码输入两次不一致！');
-       } else {
-         Toast.success('注册成功');
-         this.$notify({
-           type: "success",
-           message: "注册成功，3s后返回登录",
-           duration: 3000,
-         });
-         setTimeout(() => {
-           sessionStorage.clear("regis");
-           this.$router.go(-1);
-         }, 3000);
-       }*/
     }
+
   },
 };
 </script>

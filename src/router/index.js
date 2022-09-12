@@ -140,7 +140,8 @@ router.beforeEach((to, from, next) => {
   //console.log('islogin', islogin)
   /*判断是否需要token*/
   if (to.meta.isToken) {
-    if (loginInfo == null || token == null) {
+    if (loginInfo == null && token == null) {
+      console.log('没有token,被拦截')
       return next("/login")
     } else {
       next()

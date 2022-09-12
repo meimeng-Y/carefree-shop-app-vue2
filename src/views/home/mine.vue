@@ -119,7 +119,7 @@ export default {
   created() {
     //获取用户信息
     getUserInfo().then(res => {
-      if (res.code == 200) {
+      if (res.status == 200) {
         window.localStorage.setItem('userInfo', JSON.stringify(res.data.user))
         let user = JSON.parse(window.localStorage.getItem('userInfo'))
         //console.log(user)
