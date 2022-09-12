@@ -90,8 +90,8 @@ export default {
       banners: [],//轮播图信息
       img_url: IMG_URL,//图片主机地址
       menuss: [], //首页菜单
-      BoutiqueLists: [],//首页精品推荐
-      Likes: [],//首页猜你喜欢
+      BoutiqueLists: [], //首页精品推荐
+      Likes: [], //首页猜你喜欢
     };
   },
   filters: {
