@@ -119,21 +119,21 @@ export default {
     init() {
       //首页轮播图
       getBanner().then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           // console.log(res)
           this.banners = res.data
         }
       })
       //首页菜单
       getMenus().then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           // console.log(res)
           this.menuss = res.data
         }
       })
       //首页精品推荐
       getBoutiqueList().then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           // console.log(res)
           this.BoutiqueLists = res.data
         }
@@ -141,7 +141,7 @@ export default {
 
       //首页猜你喜欢
       getLike().then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           // console.log(res)
           this.Likes = res.data
         }
