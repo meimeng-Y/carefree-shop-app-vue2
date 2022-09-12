@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {getUserInfo} from '../../config/api'
+import {getUserInfo, loginOut} from '../../config/api'
 
 export default {
   name: "mine",
@@ -109,10 +109,14 @@ export default {
       });
     },
     logout() {
-      window.localStorage.removeItem('token')
-      window.localStorage.removeItem('userInfo')
-      this.$toast.success('退出成功')
-      this.$router.push('/home')
+      loginOut().then(res => {
+        if (res.status == 200) {
+          window.localStorage.removeItem('token')
+          window.localStorage.removeItem('userInfo')
+          this.$toast.success(res.data)
+          this.$router.push('/home')
+        }
+      })
     },
 
   },
