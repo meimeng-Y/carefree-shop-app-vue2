@@ -32,9 +32,9 @@
         style="margin: 10px;"
         text-color="#000"
         plain type="primary"
-        v-for="value in Keywords" :key="value.title"
+        v-for="value in Keywords" :key="value"
       >
-        {{ value.title }}
+        {{ value }}
       </van-tag>
     </div>
     <!--     热门搜索区域end-->
