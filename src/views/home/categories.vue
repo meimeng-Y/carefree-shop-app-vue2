@@ -75,8 +75,6 @@ export default {
     getCategory().then(res => {
       this.categorys = res.data //初始化分类数据
       this.tab_item(res.data[0].id)//初始化二级分类数据
-    }).catch(e => {
-      console.log('categories页面异常', e)
     })
   }
 }
