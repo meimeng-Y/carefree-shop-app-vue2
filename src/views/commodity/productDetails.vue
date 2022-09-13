@@ -178,7 +178,7 @@ export default {
         uniqueId: skuData.selectedSkuComb.id //商品规格ID
       }).then(res => {
         console.log(res)
-        if (res.code == 200) {
+        if (res.status == 200) {
           this.$toast.success('添加成功')
           this.show = false //关闭弹框
         }
@@ -192,7 +192,7 @@ export default {
           category: 'collect'
         }).then(res => {
           console.log(res)
-          if (res.code == 200) {
+          if (res.status == 200) {
             this.$toast.success('收藏成功')
             this.userCollect = !this.userCollect
           }
@@ -203,7 +203,7 @@ export default {
           category: 'collect'
         }).then(res => {
           console.log(res)
-          if (res.code == 200) {
+          if (res.status == 200) {
             this.$toast.success('取消成功')
             this.userCollect = !this.userCollect
           }

@@ -74,7 +74,7 @@ export default {
         category: this.queryType
       }).then(res => {
         console.log(res)
-        if (res.code == 200) {
+        if (res.status == 200) {
           this.$toast.success('删除成功')
           //刷新数据
           this.result = [] //清除多选框的选中
