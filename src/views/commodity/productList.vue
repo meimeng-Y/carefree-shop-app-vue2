@@ -9,7 +9,8 @@
     <!--    筛选条件-->
     <van-tabbar v-model="active" :fixed="false" class="condition">
       <van-tabbar-item name="home" @click="onClick(1)">综合</van-tabbar-item>
-      <van-tabbar-item name="search" @click="onClick(2)">价格<span>图标</span></van-tabbar-item>
+      <van-tabbar-item name="search" @click="onClick(2)">价格<span>{{ priceSort === 'asc' ? '降序' : '升序' }}</span>
+      </van-tabbar-item>
       <van-tabbar-item name="friends" @click="onClick(3)">新品</van-tabbar-item>
     </van-tabbar>
     <!--    筛选条件end-->
@@ -71,17 +72,17 @@ export default {
   },
   mounted() {
     /*搜索栏进行搜索*/
-    if (this.$route.params.keyword != null) {
+    if (this.$route.query.keyword != null) {
       // console.log(this.$route.params.keyword)
       //搜索词
-      this.queryParam['keyword'] = this.$route.params.keyword
+      this.queryParam['keyword'] = this.$route.query.keyword
     }
     /*搜索栏进行搜索end*/
     /*分类查询商品列表*/
-    if (this.$route.params.sid != null) {
+    if (this.$route.query.sid != null) {
       // console.log(this.$route.params.sid)
       //搜索词
-      this.queryParam['sid'] = this.$route.params.sid
+      this.queryParam['sid'] = this.$route.query.sid
     }
     /*分类查询商品列表end*/
     this.getlist(this.queryParam) //获取数据
@@ -117,20 +118,23 @@ export default {
     },
     /*判断点击的按钮*/
     onClick(id) {
-      if (id == 1) {
+      if (id === 1) {
         this.move()
-      } else if (id == 2) {
+      } else if (id === 2) {
         /*按商品价格进行排序*/
-        if (this.priceSort == 'desc') {
+        if (this.priceSort === 'desc') {
           this.priceSort = 'asc'
           this.move('priceOrder', 'desc')
         } else {
           this.priceSort = 'desc'
           this.move('priceOrder', 'asc')
         }
-      } else if (id == 3) {
+      } else if (id === 3) {
         this.move('news', 1)
-      } else if (id == 4) {
+      }
+      /*
+      TODO 应该是图标的class
+      else if (id == 4) {
         if (this.salesSort == 'desc') {
           this.salesSort = 'asc'
           this.move('salesSort', 'desc')
@@ -138,7 +142,7 @@ export default {
           this.salesSort = 'desc'
           this.move('salesSort', 'asc')
         }
-      }
+      }*/
     }
   }
 }

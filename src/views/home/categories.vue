@@ -63,9 +63,9 @@ export default {
     },
     //点击分类跳转到商品列表
     goSearch(val) {
-      this.$router.push({
+      this.$router.replace({
         name: 'productList',
-        params: {
+        query: {
           sid: val
         }
       })

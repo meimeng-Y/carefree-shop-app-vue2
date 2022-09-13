@@ -63,9 +63,9 @@ export default {
     },
     //点击搜索按钮跳转到商品列表
     goSearch(val) {
-      this.$router.replace({
+      this.$router.push({
         name: 'productList',
-        params: {
+        query: {
           keyword: val
         }
       })
