@@ -67,11 +67,18 @@ export default {
   },
   methods: {
     onSubmit() {
+      if (this.result.length <= 0) {
+        this.$toast.fail('请选择删除内容')
+        return
+      }
+      // console.log(this.result)
+      // 将多选数组转为字符串
+      let listId = JSON.stringify(this.result).replace('[', '').replace(']', '')
       //批量删除
-      console.log(this.result)
+      // console.log(listId)
       postCollectDels({
-        listid: this.result,
-        category: this.queryType
+        category: this.queryType,
+        ids: listId //字符串格式
       }).then(res => {
         console.log(res)
         if (res.status == 200) {

@@ -94,10 +94,10 @@ export default {
         this.limit += 10
       } else {
         // 说明参数名改变，页大小重置
-        console.log('')
+        // console.log('')
         //添加新的查询参数
         this.limit = 10
-        console.log(this.limit)
+        // console.log(this.limit)
       }
       /*将传来的参数进行同步*/
       this.name = name
