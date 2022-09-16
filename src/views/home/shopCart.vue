@@ -28,15 +28,15 @@
             :thumb='img_url+value.productInfo.image'
           >
             <template #tags>
-                <!--              商品规格-->
-                <van-tag plain type="danger">
-                    {{ value.productInfo.attrInfo.sku }}
-                </van-tag>
+              <!--              商品规格-->
+              <van-tag plain type="danger">
+                {{ value.productInfo.attrInfo.sku }}
+              </van-tag>
             </template>
             <!--            自定义右下角内容-->
             <template #footer>
               <!--              步进器-->
-                <van-stepper v-model="value.cartNum" integer async-change @change="onChange(value)"/>
+              <van-stepper v-model="value.cartNum" integer async-change @change="onChange(value)"/>
             </template>
             <!--            自定义右下角内容end-->
           </van-card>
@@ -44,7 +44,7 @@
 
           <!--          删除键-->
           <template #right>
-            <van-button square text="删除" type="danger" class="delete-button"/>
+            <van-button square text="删除" type="danger" class="delete-button" @click="delCar(value.id)"/>
           </template>
           <!--          删除键end-->
 
@@ -53,12 +53,12 @@
     </van-checkbox-group>
     <!--    购物车卡片-->
     <!--    提交订单栏-->
-      <van-submit-bar :price="money" button-text="提交订单" @submit="onSubmit">
-          <van-checkbox v-model="checked">全选</van-checkbox>
-          <template #tip>
-              左划可以删除 <span @click="onClickEditAddress">按钮点击事件</span>
-          </template>
-      </van-submit-bar>
+    <van-submit-bar :price="money" button-text="提交订单" @submit="onSubmit">
+      <van-checkbox v-model="checked">全选</van-checkbox>
+      <template #tip>
+        左划可以删除 <span @click="onClickEditAddress">按钮点击事件</span>
+      </template>
+    </van-submit-bar>
     <!--    提交订单栏end-->
 
   </div>
@@ -66,21 +66,21 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getCartList, IMG_URL, postUpCartNum, postOrderConfirm} from '../../config/api'
+import {getCartList, IMG_URL, postUpCartNum, postOrderConfirm, postCartDelList} from '../../config/api'
 
 export default {
   name: "shopCart",
   components: {TopTitle},
   data() {
     return {
-        img_url: IMG_URL,
-        title: '购物车',
-        result: [],//多选框绑定数据
-        numValue: 1,
-        checked: false,
-        cartList: [],//有效购物车列表
-        nocartList: [],//失效购物车列表
-        money: 0,
+      img_url: IMG_URL,
+      title: '购物车',
+      result: [],//多选框绑定数据
+      numValue: 1,
+      checked: false,
+      cartList: [],//有效购物车列表
+      nocartList: [],//失效购物车列表
+      money: 0,
     }
   },
   filters: {
@@ -91,89 +91,100 @@ export default {
     },
   },
   methods: {
-      //提示的点击事件
+    // 删除商品
+    delCar(id) {
+      postCartDelList({
+        ids: [id]
+      }).then(res => {
+        if (res.status == 200) {
+          this.$toast.success('删除成功')
+          this.getCart()
+        }
+      })
+    },
+    //提示的点击事件
     onClickEditAddress() {
 
     },
-      //提交订单
+    //提交订单
     onSubmit() {
-        if (this.result.length >= 1) {
-            // postOrderConfirm({
-            //   cartId: this.result
-            // }).then(res => {
-            //   console.log(res)
-            // })
-            this.$router.push({
-                name: 'creationOrder',
-                query: {
-                    cartId: this.result
-                }
-            })
-        } else {
-            console.log(66)
-            this.$toast.fail('最少选择一样商品')
-        }
-    },
-      //修改购物车数量
-      onChange(val) {
-          //传参整个商品对象
-          console.log(val)
-          this.$toast.loading({forbidClick: true});
-          clearTimeout(this.timer);
-          this.timer = setTimeout(() => {
-              this.$toast.clear();
-              // 注意此时修改 value 后会再次触发 change 事件
-              if (val.cartNum > 0 && val.cartNum != null) {
-                  postUpCartNum({
-                      number: val.cartNum,
-                      id: val.id
-                  }).then(res => {
-                      console.log(res)
-                      this.computeMoney()
-                  })
-              }
-          }, 500);
-      },
-      //计算金额
-      computeMoney() {
-          //计算金额
-          let money = 0
-          for (let i = 0; i < this.result.length; i++) {
-              let choice = this.result[i]
-              for (let l = 0; l < this.cartList.length; l++) {
-                  let cart = this.cartList[l]
-                  if (choice == cart.id) {
-                      // console.log(cart.id)
-                      let valMoney = (cart.cartNum * cart.vipTruePrice)
-                      money = money + valMoney
-                      console.log('money', money)
-                      break
-                  }
-              }
+      if (this.result.length >= 1) {
+        // postOrderConfirm({
+        //   cartId: this.result
+        // }).then(res => {
+        //   console.log(res)
+        // })
+        this.$router.push({
+          name: 'creationOrder',
+          query: {
+            cartId: this.result
           }
-          this.money = money * 100
-      },
-      //获取购物车列表
-      getCart() {
-          getCartList().then(res => {
-              console.log(res)
-              this.cartList = res.data.valid //有效购物车列表
-              this.nocartList = res.data.invalid //失效购物车列表
-          })
+        })
+      } else {
+        console.log(66)
+        this.$toast.fail('最少选择一样商品')
       }
-  },
-    watch: {
-        //侦听多选,计算金额
-        result: function (newVal, oldVal) {
-            // console.log(newVal)
-            // console.log(oldVal)
-
-            this.computeMoney()
-        }
     },
-    mounted() {
-        this.getCart()
+    //修改购物车数量
+    onChange(val) {
+      //传参整个商品对象
+      console.log(val)
+      this.$toast.loading({forbidClick: true});
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.$toast.clear();
+        // 注意此时修改 value 后会再次触发 change 事件
+        if (val.cartNum > 0 && val.cartNum != null) {
+          postUpCartNum({
+            number: val.cartNum,
+            id: val.id
+          }).then(res => {
+            console.log(res)
+            this.computeMoney()
+          })
+        }
+      }, 500);
+    },
+    //计算金额
+    computeMoney() {
+      //计算金额
+      let money = 0
+      for (let i = 0; i < this.result.length; i++) {
+        let choice = this.result[i]
+        for (let l = 0; l < this.cartList.length; l++) {
+          let cart = this.cartList[l]
+          if (choice == cart.id) {
+            // console.log(cart.id)
+            let valMoney = (cart.cartNum * cart.vipTruePrice)
+            money = money + valMoney
+            console.log('money', money)
+            break
+          }
+        }
+      }
+      this.money = money * 100
+    },
+    //获取购物车列表
+    getCart() {
+      getCartList().then(res => {
+        console.log(res)
+        this.cartList = res.data.valid //有效购物车列表
+        this.nocartList = res.data.invalid //失效购物车列表
+      })
     }
+  },
+  watch: {
+    //侦听多选,计算金额
+    result: function (newVal, oldVal) {
+      // console.log(newVal)
+      // console.log(oldVal)
+
+      this.computeMoney()
+    }
+  },
+  mounted() {
+    this.getCart()
+  }
 }
 </script>
 

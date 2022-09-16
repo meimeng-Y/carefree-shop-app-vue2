@@ -175,7 +175,7 @@ export default {
         cartNum: skuData.selectedNum, //商品数量
         new: 0,//是否新购买
         productId: this.productId,//商品ID
-        uniqueId: skuData.selectedSkuComb.id //商品规格ID
+        uniqueId: skuData.selectedSkuComb.id //商品规格的唯一值
       }).then(res => {
         console.log(res)
         if (res.status == 200) {
