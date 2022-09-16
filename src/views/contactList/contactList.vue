@@ -41,7 +41,10 @@ export default {
     return {
       title: '联系人列表',
       ificon: false,
-      Address: []
+      Address: [],
+      //分页
+      limit: 10,//页大小,默认为 10
+      page: 1,//页码,默认为1
     }
   },
   methods: {
@@ -57,7 +60,10 @@ export default {
     }
   },
   mounted() {
-    getAddress().then(res => {
+    getAddress({
+      page: this.page,
+      limit: this.limit
+    }).then(res => {
       console.log(res)
       this.Address = res.data
     })

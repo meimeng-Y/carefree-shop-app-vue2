@@ -66,7 +66,7 @@
 
       <van-cell center title="设置默认" icon="shop-o" id="isdefault">
         <template #right-icon>
-          <van-switch v-model="defaultContact" size="24"/>
+          <van-switch v-model="contact.isDefault" size="24" :active-value='1' inactive-value="0"/>
         </template>
       </van-cell>
       <!--      两个按钮-->
@@ -75,7 +75,7 @@
       </div>
       <!--      新增和删除共用一个页面，判断是哪个-->
       <div style="margin: 16px;" v-if="ifdel">
-        <van-button round block type="danger" native-type="submit">删除</van-button>
+        <van-button round block type="danger" @click="delSubmit">删除</van-button>
       </div>
       <!--      两个按钮end-->
     </van-form>
@@ -85,7 +85,7 @@
 <script>
 import TopTitle from "../../components/topTitle";
 import {areaList} from '@vant/area-data';
-import {postEdit, getAddressOne} from '../../config/api'
+import {postEdit, getAddressOne, postDelEdit} from '../../config/api'
 
 export default {
   name: "operateContactList",
@@ -108,20 +108,9 @@ export default {
         isDefault: 0, //是否默认
         cityId: 0//省市区 ID 用于修改是定位省市区
       },
-      defaultContact: false,//设置默认联系人
       showArea: false,
       areaList, //引入的城市信息
       ifdel: false //是否显示删除按钮
-    }
-  },
-  watch: {
-    defaultContact(newVal, oldVal) {
-      if (newVal == true) {
-        //设置默认地址
-        this.contact.isDefault = 1
-      } else {
-        this.contact.isDefault = 0
-      }
     }
   },
   mounted() {
@@ -147,7 +136,7 @@ export default {
     onSubmit() {
       postEdit(this.contact).then(res => {
         console.log(res)
-        if (res.code == 200) {
+        if (res.status === 200) {
           this.$toast.success(res.msg)
           this.$router.replace('/contactList')
         } else {
@@ -168,6 +157,19 @@ export default {
       this.contact.cityId = values[2].code
       this.showArea = false;
     },
+    //删除地址
+    delSubmit() {
+      postDelEdit({
+        id: this.contact.id.toString()
+      }).then(res => {
+        if (res.status === 200) {
+          this.$toast.success(res.msg)
+          this.$router.replace('/contactList')
+        } else {
+          this.$toast.fail(res.msg)
+        }
+      })
+    }
   }
 }
 </script>
