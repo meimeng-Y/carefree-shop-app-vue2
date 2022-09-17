@@ -14,7 +14,7 @@
             fit="cover"
             height="6rem"
             round
-            src="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :src="avatar"
             width="6rem"
           />
         </van-col>
@@ -87,12 +87,14 @@
 </template>
 
 <script>
-import {getUserInfo, loginOut} from '../../config/api'
+import {getUserInfo, loginOut, IMG_URL} from '../../config/api'
 
 export default {
   name: "mine",
   data() {
     return {
+      img_url: IMG_URL,//图片地址主机
+      avatar: '',//头像
       nickname: '',//用户昵称
       nowMoney: 0,//用户余额
       payCount: 0,//用户购买次数
@@ -124,13 +126,14 @@ export default {
     //获取用户信息
     getUserInfo().then(res => {
       if (res.status == 200) {
-        window.localStorage.setItem('userInfo', JSON.stringify(res.data.user))
+        window.localStorage.setItem('userInfo', JSON.stringify(res.data))
         let user = JSON.parse(window.localStorage.getItem('userInfo'))
-        //console.log(user)
+        console.log(res)
         this.nickname = user.nickname
         this.nowMoney = user.nowMoney
         this.payCount = user.payCount
         this.integral = user.integral
+        this.avatar = this.img_url + user.avatar
       }
     })
 
