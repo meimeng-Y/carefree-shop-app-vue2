@@ -137,7 +137,7 @@ export default {
       cartInfo: [],//商品信息数据
       userInfo: {},//用户信息
       totalPrice: 0,//总价
-      priceGroup: {},//订单的价格信息
+      priceGroup: {},//订单的汇总信息
       address: [],//地址信息
       ifaddress: false,//控制地址详情的显示
       chooseAddress: {},//选中的地址详情的显示
@@ -196,7 +196,7 @@ export default {
         pinkId: 0,//拼团id 0没有拼团
       }).then(res => {
         // console.log(res)
-        if (res.code === 200) {
+        if (res.status === 200) {
           this.$toast.success(res.msg)
           setTimeout(() => {
             this.$router.replace('/paySuccess')
@@ -232,11 +232,6 @@ export default {
       this.userInfo = res.data.userInfo
       this.orderKey = res.data.orderKey
       this.priceGroup = res.data.priceGroup
-      //计算金额
-      /*
-      弃用，商品价格由后台计算，放回结果到前端
-      this.countMoney()
-       */
       this.totalPrice = this.priceGroup.totalPrice
       //获取地址
       getAddress().then(res => {
