@@ -87,14 +87,14 @@ export default {
     rechargeBut(id) {
       this.isClick = true
       postRechargeTest({
-        rechar_id: id
+        rechar_id: id.toString()
       }).then(res => {
-        if (res.code == 200) {
+        if (res.status == 200) {
           this.$toast.success(res.data)
           this.getUserBalance()
           this.isClick = false
         } else {
-          this.$toast.success(res.data)
+          this.$toast.fail(res.data)
           this.isClick = false
         }
       })
