@@ -59,7 +59,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {postOrderDetail, IMG_URL} from "../../config/api";
+import {getOrderDetail, IMG_URL} from "../../config/api";
 
 export default {
   name: "order",
@@ -81,8 +81,10 @@ export default {
   },
   created() {
     let key = this.$route.query.key
-    // console.log(key)
-    postOrderDetail(key).then(res => {
+    console.log(key)
+    getOrderDetail({
+      key: key
+    }).then(res => {
       console.log(res)
       this.order = res.data
     })

@@ -123,6 +123,12 @@ export const postUpCartNum = params => post(USER_CART_URL + '/num', params);
 //确认订单
 export const postOrderConfirm = params => post(USER_ORDER_URL + '/confirm', params);
 
+//取消订单
+export const postOrderCancel = params => post(USER_ORDER_URL + '/cancel', params);
+
+//支付订单
+export const postOrderPay = params => post(USER_ORDER_URL + '/pay', params);
+
 //提交订单，并支付
 export const postOrderCreate = params => post(USER_ORDER_URL + `/create//${params.key}`, params);
 
@@ -130,10 +136,10 @@ export const postOrderCreate = params => post(USER_ORDER_URL + `/create//${param
 export const postOrderComputed = params => post(USER_ORDER_URL + `/computed/${params.key}`, params);
 
 //获取订单列表
-export const postOrderList = params => post(USER_ORDER_URL + '/list', params);
+export const getOrderList = params => get(USER_ORDER_URL + '/list', params);
 
 //获取订单详情
-export const postOrderDetail = params => post(USER_ORDER_URL + '/detail', params);
+export const getOrderDetail = params => get(USER_ORDER_URL + `/detail/${params.key}`, null);
 
 //获取用户信息
 export const getUserInfo = params => get(USER_URL + '/userInfo', params);
