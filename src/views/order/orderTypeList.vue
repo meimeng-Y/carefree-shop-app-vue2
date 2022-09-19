@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {IMG_URL, postOrderCancel, postOrderPay} from "../../config/api";
+import {IMG_URL, postOrderCancel, postOrderPay} from "../../api/api";
 
 export default {
   name: "orderTypeList",

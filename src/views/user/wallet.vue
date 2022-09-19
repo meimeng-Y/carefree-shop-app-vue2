@@ -53,7 +53,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getBalance, getRechargeIndex, postRechargeTest} from '../../config/api'
+import {getBalance, getRechargeIndex, postRechargeTest} from '../../api/api'
 
 export default {
   name: "wallet",

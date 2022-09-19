@@ -29,7 +29,7 @@
               <van-row>
                 <van-col span="12" class="left_val" style="">
                   <span style="">￥</span>
-                  {{ storeInfo.price | capittalizze }}
+                  {{ storeInfo.price }}
                 </van-col>
                 <van-col class="right_val" span="12">
                   <div style="">
@@ -54,14 +54,14 @@
         </van-cell-group>
 
         <van-cell-group inset>
-          <van-cell title="选择规格" @click="show=true" is-link>
+          <van-cell title="选择规格" @click="chooseSku=true" is-link>
           </van-cell>
           <template>
             <!--   规格类目-->
             <!-- :goods="goods" 商品信息-->
             <!-- :hide-stock="sku.hide_stock" 是否显示商品剩余库存-->
             <van-sku
-              v-model="show"
+              v-model="chooseSku"
               :sku="sku"
               :goods="goods"
               :hide-stock="sku.hide_stock"
@@ -69,9 +69,9 @@
               @add-cart="onAddCartClicked"
             />
           </template>
-          <van-cell title="发货" is-link/>
-          <van-cell title="保障" is-link/>
-          <van-cell title="参数" is-link/>
+          <van-cell title="发货" is-link @click="$toast.fail('功能待完善')"/>
+          <van-cell title="保障" is-link @click="$toast.fail('功能待完善')"/>
+          <van-cell title="参数" is-link @click="$toast.fail('功能待完善')"/>
         </van-cell-group>
 
 
@@ -88,11 +88,11 @@
     </div>
     <!--    商品导航-->
     <van-goods-action>
-      <van-goods-action-icon icon="chat-o" text="客服" color="#ee0a24"/>
-      <van-goods-action-icon icon="cart-o" text="购物车"/>
+      <van-goods-action-icon icon="chat-o" text="客服" color="#ee0a24" @click="$toast.fail('功能未开发')"/>
+      <van-goods-action-icon icon="cart-o" text="购物车" to="/shopCart"/>
       <van-goods-action-icon icon="star-o" text="收藏" v-if="!userCollect" color="#ff5000" @click="cutover"/>
       <van-goods-action-icon icon="star" text="已收藏" v-if="userCollect" color="#ff5000" @click="cutover"/>
-      <van-goods-action-button type="warning" text="加入购物车"/>
+      <van-goods-action-button type="warning" text="加入购物车" @click="chooseSku=true"/>
       <van-goods-action-button type="danger" text="立即购买" to="/creationOrder"/>
     </van-goods-action>
     <!--    商品导航end-->
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import {getGoodsDetail, IMG_URL, postCollectAdd, postCollectDel, postCartAdd} from '../../config/api'
+import {getGoodsDetail, IMG_URL, postCartAdd, postCollectAdd, postCollectDel} from '../../api/api'
 
 
 export default {
@@ -111,7 +111,7 @@ export default {
     return {
       img_url: IMG_URL,//图片地址前缀
       current: 0,
-      show: false,//显示商品规格框
+      chooseSku: false,//显示商品规格框
       productId: '',//商品ID
       storeInfo: {}, //商品信息
       sku: {
@@ -136,25 +136,22 @@ export default {
   filters: {
     //用来解析html标签
     chageUrl: function (data, url) {
+      let s;
+      let b;
+      let a;
       if (data) {
-        var a = data
-        var vm = this
-        var b = /<img [^>]*src=['"]([^'"]+)[^>]*>/g;
-        var s = a.match(b);
+        a = data;
+        b = /<img [^>]*src=['"]([^'"]+)[^>]*>/g;
+        s = a.match(b);
       }
       if (s != null) {
-        for (var i = 0; i < s.length; i++) {
-          var srcImg = s[i].replace(b, '$1').replace(/\s+/g, "");
+        for (let i = 0; i < s.length; i++) {
+          let srcImg = s[i].replace(b, '$1').replace(/\s+/g, "");
           a = a.replace(new RegExp(srcImg, 'g'), url + srcImg);
         }
       }
       return a;
-    },
-    //价格小数点
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
+    }
   },
   methods: {
     onChange(index) {
@@ -169,7 +166,6 @@ export default {
     },
     onAddCartClicked(skuData) {
       //点击添加购物车回调
-      // this.$toast.success('添加购物车回调')
       // console.log(skuData)
       postCartAdd({
         cartNum: skuData.selectedNum, //商品数量
@@ -178,9 +174,9 @@ export default {
         uniqueId: skuData.selectedSkuComb.id //商品规格的唯一值
       }).then(res => {
         console.log(res)
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.$toast.success('添加成功')
-          this.show = false //关闭弹框
+          this.chooseSku = false //关闭弹框
         }
       })
     },
@@ -191,8 +187,8 @@ export default {
           id: this.productId,
           category: 'collect'
         }).then(res => {
-          console.log(res)
-          if (res.status == 200) {
+          // console.log(res)
+          if (res.status === 200) {
             this.$toast.success('收藏成功')
             this.userCollect = !this.userCollect
           }
@@ -202,8 +198,8 @@ export default {
           id: this.productId,
           category: 'collect'
         }).then(res => {
-          console.log(res)
-          if (res.status == 200) {
+          // console.log(res)
+          if (res.status === 200) {
             this.$toast.success('取消成功')
             this.userCollect = !this.userCollect
           }
@@ -328,8 +324,7 @@ export default {
     }
 
     .van-cell-group {
-      margin: 0 8px;
-      margin-top: 8px;
+      margin: 8px 8px 0;
     }
   }
 }

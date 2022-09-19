@@ -19,7 +19,7 @@
     <!--    功能图标-->
     <van-grid square clickable :border='false' style="margin-top: 9px">
       <van-grid-item v-for="(menus,index) in menuss" :key="index" :icon="img_url+menus.pic" :text="menus.name"
-                     to="/productList"/>
+                     :to="menus.url" @click="goMenus(menus.url)"/>
     </van-grid>
     <!--    功能图标end-->
     <!--    商品列表-->
@@ -42,7 +42,7 @@
           </van-row>
           <van-row class="price">
             <!--            当前价格-->
-            <span class="newprice">￥{{ val.price | capittalizze }}</span>
+            <span class="newprice">￥{{ val.price }}</span>
             <!--            历史价格-->
             <span class="oldprice">￥{{ val.otPrice }}</span>
           </van-row>
@@ -63,11 +63,11 @@
       <van-card
         v-for="(val,index) in Likes" :key="index"
         tag="Like"
-        :price="val.price | capittalizze"
+        :price="val.price"
         :desc="val.storeInfo"
         :title="val.storeName"
         :thumb='img_url + val.image '
-        :origin-price="val.otPrice | capittalizze"
+        :origin-price="val.otPrice"
         @click="goProDeta(val.id)"
       />
     </div>
@@ -78,7 +78,7 @@
 <script>
 import {Toast} from 'vant';
 import searchModule from "../../components/searchModule";
-import {getBanner, IMG_URL, getMenus, getBoutiqueList, getLike} from '../../config/api'
+import {getBanner, getBoutiqueList, getLike, getMenus, IMG_URL} from '../../api/api'
 
 export default {
   name: "home",
@@ -94,14 +94,12 @@ export default {
       Likes: [], //首页猜你喜欢
     };
   },
-  filters: {
-    //过滤器
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
-  },
   methods: {
+    goMenus(val) {
+      if (val === '/') {
+        this.$toast.fail('页面未开发')
+      }
+    },
     onSearch(val) {
       Toast(val);
     },
@@ -119,21 +117,21 @@ export default {
     init() {
       //首页轮播图
       getBanner().then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           // console.log(res)
           this.banners = res.data
         }
       })
       //首页菜单
       getMenus().then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           // console.log(res)
           this.menuss = res.data
         }
       })
       //首页精品推荐
       getBoutiqueList().then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           // console.log(res)
           this.BoutiqueLists = res.data
         }
@@ -141,7 +139,7 @@ export default {
 
       //首页猜你喜欢
       getLike().then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           // console.log(res)
           this.Likes = res.data
         }
@@ -161,7 +159,7 @@ export default {
   #shoplike {
     .van-card {
       background-color: white;
-      margin-top: 0px;
+      margin-top: 0;
 
       .van-card__price {
         color: #ff8725;

@@ -32,7 +32,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getAddress} from '../../config/api'
+import {getAddress} from '../../api/api'
 
 export default {
   name: "contactList",

@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import {getUserInfo, loginOut, IMG_URL} from '../../config/api'
+import {getUserInfo, IMG_URL, loginOut} from '../../api/api'
 
 export default {
   name: "mine",

@@ -40,7 +40,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getCategory, IMG_URL} from '../../config/api'
+import {getCategory, IMG_URL} from '../../api/api'
 
 export default {
   name: "categories",

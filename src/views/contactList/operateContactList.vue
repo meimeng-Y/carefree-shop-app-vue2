@@ -85,7 +85,7 @@
 <script>
 import TopTitle from "../../components/topTitle";
 import {areaList} from '@vant/area-data';
-import {postEdit, getAddressOne, postDelEdit} from '../../config/api'
+import {getAddressOne, postDelEdit, postEdit} from '../../api/api'
 
 export default {
   name: "operateContactList",

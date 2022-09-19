@@ -42,7 +42,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {IMG_URL, getGoodsList} from '../../config/api'
+import {getGoodsList, IMG_URL} from '../../api/api'
 
 export default {
   name: "productList",

@@ -28,7 +28,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getOrderList, IMG_URL} from '../../config/api'
+import {getOrderList, IMG_URL} from '../../api/api'
 import OrderTypeList from "./orderTypeList";
 
 export default {

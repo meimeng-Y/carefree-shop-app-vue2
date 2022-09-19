@@ -1,7 +1,5 @@
 import axios from "axios";
 import router from '../router/index'
-//引入
-
 
 //请求根路径 mock路径
 // axios.defaults.baseURL = 'http://127.0.0.1:4523/m1/1179224-0-default'
@@ -12,7 +10,6 @@ axios.interceptors.request.use(config => {
   // console.log(config)
   //拦截所有请求，添加登陆用户的token
   if (window.localStorage.getItem('token')) {
-
     config.headers.Authorization = window.localStorage.getItem('token');
   }
   return config
@@ -24,27 +21,24 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(response => {
   // console.log("返回的response")
   // console.log(response.data)
-  if (response.data.status == 402) {
+  if (response.data.status === 402) {
     /*没有token*/
-    console.log("返回的402")
-    console.log('没有token')
-    router.push('/login').catch(() => console.log('402路由跳转异常'))
+    console.log("返回的402", '没有token')
+    router.replace({name: 'Login'}).catch(() => console.log('402路由跳转异常'))
     // 中断Promise链
     return new Promise(() => {
     })
-  } else if (response.data.status == 406) {
+  } else if (response.data.status === 406) {
     /*token失效*/
-    console.log("返回的406")
-    console.log('token失效')
-    console.log('清理用户信息开始')
+    console.log("返回的406", 'token失效,清理用户信息开始')
     //要等待执行完
     window.localStorage.removeItem('token')
     window.localStorage.removeItem('userInfo')
-    router.push('/login').catch(() => console.log('406路由跳转异常'))
+    router.replace({name: 'Login'}).catch(() => console.log('406路由跳转异常'))
     // 中断Promise链
     return new Promise(() => {
     })
-  } else if (response.data.status == 404) {
+  } else if (response.data.status === 404) {
     console.log("返回的404")
     // 中断Promise链
     return new Promise(() => {
@@ -54,7 +48,7 @@ axios.interceptors.response.use(response => {
 // eslint-disable-next-line no-unused-vars
 }, error => {
   //统一异常处理
-  console.log("响应拦截器失败的响应", error)
+  console.log("响应拦截器统一异常处理的信息", error)
   // 中断Promise链
   return new Promise(() => {
   })

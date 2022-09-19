@@ -10,7 +10,7 @@
     <!--    <van-empty description="购物车为空"/>-->
     <!--    为空时显示end-->
     <!--    购物车卡片-->
-    <van-checkbox-group id="shopCard" v-model="result">
+    <van-checkbox-group id="shopCard" v-model="result" ref="checkbox">
       <van-checkbox :name="value.id" v-for="value in cartList" :key="value.id" label-disabled>
         <van-swipe-cell>
           <!--          商品卡片-->
@@ -21,7 +21,7 @@
                title="商品标题"-->
           <van-card
             :num="value.cartNum"
-            :price="value.productInfo.price | capittalizze"
+            :price="value.productInfo.price"
             :desc="value.productInfo.storeInfo"
             :title="value.productInfo.storeName"
             class="goods-card"
@@ -54,7 +54,7 @@
     <!--    购物车卡片-->
     <!--    提交订单栏-->
     <van-submit-bar :price="money" button-text="提交订单" @submit="onSubmit">
-      <van-checkbox v-model="checked">全选</van-checkbox>
+      <van-checkbox v-model="checked" @click="selectAll(checked)">全选</van-checkbox>
       <template #tip>
         左划可以删除 <span @click="onClickEditAddress">按钮点击事件</span>
       </template>
@@ -66,7 +66,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getCartList, IMG_URL, postUpCartNum, postOrderConfirm, postCartDelList} from '../../config/api'
+import {getCartList, IMG_URL, postCartDelList, postUpCartNum} from '../../api/api'
 
 export default {
   name: "shopCart",
@@ -83,22 +83,16 @@ export default {
       money: 0,
     }
   },
-  filters: {
-    //过滤器
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
-  },
   methods: {
     // 删除商品
     delCar(id) {
       postCartDelList({
         ids: [id]
       }).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.$toast.success('删除成功')
-          this.getCart()
+          this.result = []//清除多选
+          this.getCart()//刷新数据
         }
       })
     },
@@ -106,29 +100,29 @@ export default {
     onClickEditAddress() {
 
     },
+    //全选按钮点击事件
+    selectAll(val) {
+      //全选 或 全不选
+      // console.log(val)
+      this.$refs.checkbox.toggleAll(val)
+    },
     //提交订单
     onSubmit() {
       if (this.result.length >= 1) {
-        // postOrderConfirm({
-        //   cartId: this.result
-        // }).then(res => {
-        //   console.log(res)
-        // })
         this.$router.push({
           name: 'creationOrder',
           query: {
-            cartId: this.result
+            cartId: this.result.toString()
           }
         })
       } else {
-        console.log(66)
         this.$toast.fail('最少选择一样商品')
       }
     },
     //修改购物车数量
     onChange(val) {
       //传参整个商品对象
-      console.log(val)
+      // console.log(val)
       this.$toast.loading({forbidClick: true});
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
@@ -139,7 +133,7 @@ export default {
             number: val.cartNum,
             id: val.id
           }).then(res => {
-            console.log(res)
+            // console.log(res)
             this.computeMoney()
           })
         }
@@ -153,11 +147,11 @@ export default {
         let choice = this.result[i]
         for (let l = 0; l < this.cartList.length; l++) {
           let cart = this.cartList[l]
-          if (choice == cart.id) {
+          if (choice === cart.id) {
             // console.log(cart.id)
             let valMoney = (cart.cartNum * cart.vipTruePrice)
             money = money + valMoney
-            console.log('money', money)
+            // console.log('money', money)
             break
           }
         }
@@ -167,7 +161,7 @@ export default {
     //获取购物车列表
     getCart() {
       getCartList().then(res => {
-        console.log(res)
+        // console.log(res)
         this.cartList = res.data.valid //有效购物车列表
         this.nocartList = res.data.invalid //失效购物车列表
       })
@@ -175,11 +169,11 @@ export default {
   },
   watch: {
     //侦听多选,计算金额
-    result: function (newVal, oldVal) {
-      // console.log(newVal)
-      // console.log(oldVal)
-
+    result() {
+      //计算金额
       this.computeMoney()
+      //判断多选状态
+      this.checked = this.result.length === this.cartList.length && this.result.length !== 0;
     }
   },
   mounted() {

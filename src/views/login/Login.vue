@@ -46,7 +46,7 @@
 
 <script>
 import {Toast} from "vant";
-import {login} from '../../config/api.js'
+import {login} from '../../api/api.js'
 
 export default {
   name: "Login",
@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      //校验通过
       // console.log('校验通过')
       login({
         'username': this.username,
@@ -79,9 +78,17 @@ export default {
       //校验失败
       Toast.fail('请输入账号或密码');
     },
+    //去注册页面
     toRegister() {
       this.$router.push('/Register')
     },
+  },
+  mounted() {
+    //重复登录拦截
+    if (window.localStorage.getItem('userInfo') != null) {
+      Toast.success('您已登录成功！,无需重复登录')
+      this.$router.replace('/mine')
+    }
   }
 }
 </script>

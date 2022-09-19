@@ -43,7 +43,7 @@
 
 <script>
 import searchModule from "../../components/searchModule";
-import {getKeyword} from '../../config/api'
+import {getKeyword} from '../../api/api'
 
 export default {
   name: "search",

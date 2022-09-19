@@ -47,7 +47,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getCollectAll, IMG_URL, postCollectDels} from '../../config/api'
+import {getCollectAll, IMG_URL, postCollectDels} from '../../api/api'
 
 export default {
   name: "collect",

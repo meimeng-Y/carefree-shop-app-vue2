@@ -59,7 +59,7 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {getOrderDetail, IMG_URL} from "../../config/api";
+import {getOrderDetail, IMG_URL} from "../../api/api";
 
 export default {
   name: "order",

@@ -119,8 +119,8 @@
 
 <script>
 import TopTitle from "../../components/topTitle";
-import {ActionSheet, Toast} from 'vant';
-import {getAddress, IMG_URL, postOrderConfirm, postOrderComputed, postOrderCreate} from '../../config/api'
+import {Toast} from 'vant';
+import {getAddress, IMG_URL, postOrderComputed, postOrderConfirm, postOrderCreate} from '../../api/api'
 
 export default {
   name: "creationOrder",
@@ -208,24 +208,13 @@ export default {
         }
       })
     },
-    /*
-    弃用，商品价格由后台计算，返回结果到前端
-    //计算总价
-    countMoney() {
-      let money = 0;
-      this.cartInfo.forEach(caet => {
-        //获取单价    //获取数量
-        money += caet.vipTruePrice * caet.cartNum
-      })
-      this.totalPrice = money
-    }
-    */
   },
   mounted() {
-    let id = this.$route.query.cartId
-    // console.log(id)
+    let ids = []
+    let cartIds = this.$route.query.cartId
+    ids = cartIds.split(',')
     postOrderConfirm({
-      cartId: id
+      cartId: ids
     }).then(res => {
       // console.log(res)
       this.cartInfo = res.data.cartInfo

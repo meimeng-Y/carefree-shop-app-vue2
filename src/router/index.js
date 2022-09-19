@@ -1,11 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from "../views/Home";
-import test1 from "../views/test/test1";
-import test2 from "../views/test/test2";
 import home from "../views/home/home";
 import mine from "../views/home/mine";
-import business from "../views/test/business";
 import Login from "../views/login/Login";
 import Register from "../views/login/Register";
 import search from "../views/search/search";
@@ -60,14 +57,6 @@ const router = new Router({
           path: '/orderType',
           name: 'orderType',
           component: orderType
-        }, {
-          path: '/test1',
-          name: 'test1',
-          component: test1
-        }, {
-          path: '/test2',
-          name: 'test2',
-          component: test2
         }
       ]
     }, {
@@ -118,18 +107,11 @@ const router = new Router({
       name: 'paySuccess',
       component: paySuccess
     },
-
-    // 没用的组件
     {
       path: '/productDetails',
       name: 'productDetails',
       component: productDetails
-    }, {
-      path: '/business',
-      name: 'business',
-      component: business
     }
-
   ]
 })
 
@@ -147,8 +129,14 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    next()
+    if (to.path === '/') {
+      // 重定向到首页
+      return next("/home")
+    } else {
+      next()
+    }
   }
 })
+
 
 export default router

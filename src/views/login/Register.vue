@@ -9,6 +9,7 @@
     </div>
     <van-form @submit="onSubmit"
               @failed="noVerify">
+      <!--      TODO 上传头像功能未完成-->
       <van-field name="uploader" label="上传头像" center>
         <template #input>
           <van-uploader v-model="uploader" :max-count="1"/>
@@ -76,9 +77,7 @@
 </template>
 
 <script>
-import {Toast} from "vant";
-import {register} from '@/config/api.js'
-import {registerCode} from "../../config/api";
+import {register, registerCode} from "../../api/api";
 
 export default {
   name: 'Register',
@@ -122,9 +121,9 @@ export default {
       //手机号验证
       //表单验证
       return new Promise((resolve) => {
-        Toast.loading('验证中...');
+        this.$toast.loading('验证中...');
         setTimeout(() => {
-          Toast.clear();
+          this.$toast.clear();
           let isphone = /^1[3456789]\d{9}$/.test(val)
           if (isphone) {
             this.isBut = false
@@ -139,7 +138,7 @@ export default {
     passwodvalidator() {
       //密码验证
       //表单验证
-      return this.password == this.password1
+      return this.password === this.password1
     },
     onSubmit() {
       //校验通过
@@ -150,17 +149,17 @@ export default {
         'password': this.password,
         'nickname': this.nickname //用户昵称
       }).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.$toast.success(res.msg)
           this.$router.push('/Login')
-        } else if (res.status == 422) {
-          this.$toast.fail(res.msg)
+        } else if (res.status === 422) {
+          this.$toast.fail(res.msg) //用户名已存在
         }
       })
     },
     noVerify() {
       //校验失败
-      Toast.fail(`注册失败！\n 请完善信息`);
+      this.$toast.fail(`注册失败！\n 请完善信息`);
     }
 
   },
