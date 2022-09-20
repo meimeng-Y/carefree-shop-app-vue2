@@ -57,13 +57,13 @@ export default {
   methods: {
     //切换二级分类
     tab_item(id) {
-      let newCategory = this.categorys.filter(item => item.id == id)
+      let newCategory = this.categorys.filter(item => item.id === id)
       // console.log(newCategory)
       this.category_children = newCategory[0].children
     },
     //点击分类跳转到商品列表
     goSearch(val) {
-      this.$router.replace({
+      this.$router.push({
         name: 'productList',
         query: {
           sid: val

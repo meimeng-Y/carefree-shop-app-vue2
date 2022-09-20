@@ -29,7 +29,7 @@
           {{ value.storeName }}
         </div>
         <div class="productPrice">
-          ￥{{ value.price | capittalizze }}
+          ￥{{ value.price }}
         </div>
       </van-grid-item>
     </van-grid>
@@ -62,13 +62,6 @@ export default {
       listProds: [],//商品分类数据
       priceSort: 'asc'
     }
-  },
-  filters: {
-    //过滤器
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
   },
   mounted() {
     /*搜索栏进行搜索*/

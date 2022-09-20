@@ -72,13 +72,6 @@ export default {
       order: {},//订单详情信息
     }
   },
-  filters: {
-    //过滤器
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
-  },
   created() {
     let key = this.$route.query.key
     console.log(key)

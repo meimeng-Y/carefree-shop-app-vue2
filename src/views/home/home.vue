@@ -120,13 +120,17 @@ export default {
         if (res.status === 200) {
           // console.log(res)
           this.banners = res.data
+        } else {
+          this.$toast.fail('获取首页轮播图失败')
         }
       })
-      //首页菜单
+      //首页菜单图标
       getMenus().then(res => {
         if (res.status === 200) {
           // console.log(res)
           this.menuss = res.data
+        } else {
+          this.$toast.fail('获取首页菜单图标失败')
         }
       })
       //首页精品推荐
@@ -134,14 +138,17 @@ export default {
         if (res.status === 200) {
           // console.log(res)
           this.BoutiqueLists = res.data
+        } else {
+          this.$toast.fail('获取首页精品推荐失败')
         }
       })
-
       //首页猜你喜欢
       getLike().then(res => {
         if (res.status === 200) {
           // console.log(res)
           this.Likes = res.data
+        } else {
+          this.$toast.fail('获取首页猜你喜欢失败')
         }
       })
     }

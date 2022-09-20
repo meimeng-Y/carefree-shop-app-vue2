@@ -76,6 +76,10 @@ export default {
     this.getOldKeywords()
     //获取热门搜索
     getKeyword().then(res => {
+      if (res.status !== 200) {
+        this.$toast.fail('获取热门搜索数据失败')
+        return
+      }
       this.Keywords = res.data
     })
   }

@@ -19,6 +19,7 @@ axios.interceptors.request.use(config => {
 // 响应拦截
 //后台用户登陆信息校验不成功就跳转到登录页面
 axios.interceptors.response.use(response => {
+
   // console.log("返回的response")
   // console.log(response.data)
   if (response.data.status === 402) {

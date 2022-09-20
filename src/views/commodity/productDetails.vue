@@ -93,7 +93,7 @@
       <van-goods-action-icon icon="star-o" text="收藏" v-if="!userCollect" color="#ff5000" @click="cutover"/>
       <van-goods-action-icon icon="star" text="已收藏" v-if="userCollect" color="#ff5000" @click="cutover"/>
       <van-goods-action-button type="warning" text="加入购物车" @click="chooseSku=true"/>
-      <van-goods-action-button type="danger" text="立即购买" to="/creationOrder"/>
+      <van-goods-action-button type="danger" text="立即购买" @click="chooseSku=true"/>
     </van-goods-action>
     <!--    商品导航end-->
 
@@ -163,6 +163,7 @@ export default {
     onBuyClicked() {
       //点击购买回调
       this.$toast.success('购买回调')
+      // TODO 应该直接提交一个订单，而不是先加入购物车
     },
     onAddCartClicked(skuData) {
       //点击添加购物车回调
@@ -211,10 +212,18 @@ export default {
   mounted() {
     let id = this.$route.query.productId
     this.productId = id
+    if (id == null) {
+      this.$toast.fail('参数有误')
+      return
+    }
     // console.log(id)
     getGoodsDetail({
       id
     }).then(res => {
+      if (res.status !== 200) {
+        this.$toast.fail('获取商品数据失败')
+        return
+      }
       // console.log(res)
       //商品的基本信息
       this.storeInfo = res.data.storeInfo

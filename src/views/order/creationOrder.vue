@@ -55,7 +55,7 @@
         v-for="val in cartInfo" :key="val.id"
         :desc="val.productInfo.storeInfo"
         :num="val.cartNum"
-        :price="(val.vipTruePrice) | capittalizze"
+        :price="(val.vipTruePrice)"
         :thumb='img_url+val.productInfo.image'
         :title="val.productInfo.storeName"
       >
@@ -76,7 +76,7 @@
       <!--    优惠券end-->
       <!--    隐藏的信息-->
       <template>
-        <van-cell title="商品价格" :value="(totalPrice) | capittalizze"/>
+        <van-cell title="商品价格" :value="(totalPrice) "/>
         <van-cell title="优惠" value=""/>
         <van-cell title="运费" value="免邮费"/>
         <van-field v-model="remark" label="备注" placeholder="请输入备注"/>
@@ -144,13 +144,6 @@ export default {
       radio: '1',//支付方式
     }
   },
-  filters: {
-    //过滤器
-    capittalizze(val) {
-      let newVal = parseFloat(val).toFixed(2)
-      return newVal
-    },
-  },
   methods: {
     onSelect(item) {
       // 默认情况下点击选项时不会自动收起
@@ -210,8 +203,12 @@ export default {
     },
   },
   mounted() {
-    let ids = []
     let cartIds = this.$route.query.cartId
+    if (cartIds == null) {
+      this.$toast.fail('参数有误')
+      return
+    }
+    let ids = [] //提交的购买参数
     ids = cartIds.split(',')
     postOrderConfirm({
       cartId: ids

@@ -25,9 +25,9 @@ export default {
     isActive(val) {
       if (val.path === '/home') {
         this.active = 0
-      } else if (val.path === '/categories') {
+      } else if (val.path === '/categories' || val.path === '/productList') {
         this.active = 1
-      } else if (val.path === '/home') {
+      } else if (val.path === '/shopCart') {
 
       } else if (val.path === '/mine') {
         this.active = 3
@@ -37,11 +37,16 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    // console.log(to) //查看路由
+    console.log(to) //查看路由
     next(vm => {
       vm.isActive(to)
     })
   },
+  watch: {
+    $route(newVal) {
+      this.isActive(newVal)
+    }
+  }
 }
 </script>
 
