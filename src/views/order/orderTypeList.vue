@@ -35,7 +35,7 @@
                 取消订单
               </van-button>
               <van-button class="btn" v-if="val.statusDto.type==1"
-                          @click="this.$toast.success('已提醒卖家发货！')">
+                          @click="$toast.success('已提醒卖家发货！')">
                 提醒发货
               </van-button>
               <van-button v-if="val.statusDto.type==2" class="btn"
@@ -43,7 +43,7 @@
               </van-button>
               <van-button class="btn" :to='`/order?key=${val.unique}`'>立即查看</van-button>
               <van-button v-if="val.statusDto.type==4" class="btn"
-                          @click="delOrder">删除订单
+                          @click="delOrder(val.orderId)">删除订单
               </van-button>
             </template>
             <!--            自定义右下角内容end-->
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import {IMG_URL, postOrderCancel, postOrderPay} from "../../api/api";
+import {IMG_URL, postOrderCancel, postOrderDel, postOrderPay} from "../../api/api";
 
 export default {
   name: "orderTypeList",
@@ -80,8 +80,14 @@ export default {
     takeOrder() {
     },
     //删除订单
-    delOrder() {
-
+    delOrder(id) {
+      postOrderDel({
+        uni: id
+      }).then(res => {
+        if (res.status === 200) {
+          this.$toast.success('删除成功')
+        }
+      })
     },
     //支付订单
     payOrder(id) {

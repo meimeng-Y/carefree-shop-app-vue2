@@ -126,6 +126,9 @@ export const postOrderConfirm = params => post(USER_ORDER_URL + '/confirm', para
 //取消订单
 export const postOrderCancel = params => post(USER_ORDER_URL + '/cancel', params);
 
+//删除订单
+export const postOrderDel = params => post(USER_ORDER_URL + '/del', params);
+
 //支付订单
 export const postOrderPay = params => post(USER_ORDER_URL + '/pay', params);
 

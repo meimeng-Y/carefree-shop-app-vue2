@@ -205,7 +205,7 @@ export default {
 
   #my-swipe {
     margin-top: 10px;
-    height: 180px;
+    height: 100%;
   }
 }
 

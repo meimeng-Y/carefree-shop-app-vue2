@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import Vant from 'vant';
+import Vant, {Lazyload} from 'vant';
 import 'vant/lib/index.css';
-import {Lazyload} from 'vant';
 
 /*解决路由跳转爆错的问题  解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题*/
 // 引入路由模块
