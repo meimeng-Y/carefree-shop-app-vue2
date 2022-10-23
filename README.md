@@ -1,21 +1,38 @@
 # springboot_demo_app
 
-> A Vue.js project
+## 无忧商城
 
-## Build Setup
+> 一个基于vue2的商城APP前端项目,使用 vant UI
+> 参考天猫商城的购物流程：用户从注册开始，到完成登录，浏览商品，加入购物车，进行下单，确认收货，等一系列操作
 
-``` bash
-# install dependencies
-npm install
+## 项目预览
 
-# serve with hot reload at localhost:8080
-npm run dev
++ 前台演示地址：<https://meimengapp.netlify.app>
 
-# build for production with minification
-npm run build
+### 项目界面
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
++ ##### 界面(部分)---
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
++ ![主页1](主页1.png) ![主页2](主页2.png)
++ ![商品分类1](商品分类.png) ![商品分类2](商品分类2.png)
++ ![商品详情](商品详情.png) ![购物车](购物车.png)
++ ![订单](订单.png) ![订单详情](订单详情.png)
+
+### 注意事项：
+
+1.该项目为练习作品，部分页面跳转未完善，但以完成用户注册，登录，浏览商品，加入购物车，添加地址，模拟充值，进行下单，确认收货，查看订单等一系列功能
+
+2.项目后端部署在腾讯云函数上，返回数据较慢。
+
+~~3.图片放置在七牛云海外存储，返回较慢，甚至不返回~~ (无法使用https 弃用)
+
+4.将图片放置在自建图床床上
+
+图床测试图片
+<img src="https://meimeng.evai.pl/i/2022/10/23/xqb8e2.ico" alt="图床挂了"/>
+
+### 环境依赖
+
+> + nodejs 12.22.11
+> + less: "^3.9.0",
+
