@@ -176,6 +176,12 @@ export default {
 
   .shopname {
     font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
   }
 
   .price {

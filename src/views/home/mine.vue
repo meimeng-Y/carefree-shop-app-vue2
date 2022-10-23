@@ -14,7 +14,7 @@
             fit="cover"
             height="6rem"
             round
-            :src="avatar"
+            :src=avatar
             width="6rem"
           />
         </van-col>
@@ -133,7 +133,7 @@ export default {
         this.nowMoney = user.nowMoney
         this.payCount = user.payCount
         this.integral = user.integral
-        this.avatar = this.img_url + user.avatar
+        this.avatar = this.img_url + '/' + user.avatar
       }
     })
 
